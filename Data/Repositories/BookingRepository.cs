@@ -1,11 +1,11 @@
-using Data.Services.Interfaces;
+using Data.Repositories.Interfaces;
 using Domain;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Data.Services;
+namespace Data.Repositories;
 
-public class BookingService(DatabaseContext dbContext) : IBookingService
+public class BookingRepository(DatabaseContext dbContext) : IBookingRepository
 {
     public async Task<List<Booking>> GetAllBookingsForResource(int id)
     {

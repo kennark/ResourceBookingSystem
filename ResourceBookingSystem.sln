@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceBookingSystemTests", "ResourceBookingSystemTests\ResourceBookingSystemTests.csproj", "{A86ABCC6-61B4-455E-B809-6E3A0320030E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{C9C9722F-A800-41CE-964C-65389DBAB5C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{A86ABCC6-61B4-455E-B809-6E3A0320030E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A86ABCC6-61B4-455E-B809-6E3A0320030E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A86ABCC6-61B4-455E-B809-6E3A0320030E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9C9722F-A800-41CE-964C-65389DBAB5C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9C9722F-A800-41CE-964C-65389DBAB5C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9C9722F-A800-41CE-964C-65389DBAB5C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9C9722F-A800-41CE-964C-65389DBAB5C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

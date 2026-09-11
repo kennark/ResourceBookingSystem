@@ -1,5 +1,5 @@
-using Data.Services;
-using Data.Services.Interfaces;
+using Data.Repositories;
+using Data.Repositories.Interfaces;
 using Domain;
 using ResourceBookingSystem.Components;
 
@@ -11,8 +11,8 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddDbContext<DatabaseContext>();
 
-builder.Services.AddScoped<IResourceService, ResourceService>();
-builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IResourceRepository, ResourceRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
 var app = builder.Build();
 

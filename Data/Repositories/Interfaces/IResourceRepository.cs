@@ -1,8 +1,8 @@
 using Domain.Entities;
 
-namespace Data.Services.Interfaces;
+namespace Data.Repositories.Interfaces;
 
-public interface IResourceService
+public interface IResourceRepository
 {
     Task<List<Resource>> GetAllResources();
     Task<List<Resource>> GetAllActiveResources();

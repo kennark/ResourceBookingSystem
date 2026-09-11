@@ -1,12 +1,12 @@
-using Data.Services.Interfaces;
+using Data.Repositories.Interfaces;
 using Domain;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace Data.Services;
+namespace Data.Repositories;
 
-public class ResourceService(DatabaseContext dbContext) : IResourceService
+public class ResourceRepository(DatabaseContext dbContext) : IResourceRepository
 {
     public async Task<List<Resource>> GetAllResources()
     {

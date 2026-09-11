@@ -1,8 +1,8 @@
 using Domain.Entities;
 
-namespace Data.Services.Interfaces;
+namespace Data.Repositories.Interfaces;
 
-public interface IBookingService
+public interface IBookingRepository
 {
     Task<List<Booking>> GetAllBookingsForResource(int id);
 
