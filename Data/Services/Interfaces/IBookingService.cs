@@ -4,5 +4,7 @@ namespace Data.Services.Interfaces;
 
 public interface IBookingService
 {
-    Task<List<Booking>> GetAllBookings();
+    Task<List<Booking>> GetAllBookingsForResource(int id);
+
+    Task<Booking> AddBooking(Booking booking);
 }
