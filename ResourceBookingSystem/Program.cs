@@ -1,5 +1,7 @@
 using Data.Repositories;
 using Data.Repositories.Interfaces;
+using Data.Validation;
+using Data.Validation.Interfaces;
 using Domain;
 using ResourceBookingSystem.Components;
 
@@ -13,6 +15,7 @@ builder.Services.AddDbContext<DatabaseContext>();
 
 builder.Services.AddScoped<IResourceRepository, ResourceRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IBookingValidator, BookingValidator>();
 
 var app = builder.Build();
 

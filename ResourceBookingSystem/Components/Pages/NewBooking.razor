@@ -1,9 +1,11 @@
 @page "/NewBooking/{resourceId:int}"
 @using Data.Repositories.Interfaces
+@using Data.Validation.Interfaces
 @using Domain.Entities
 @inject IResourceRepository ResourceRepository
 @inject IBookingRepository BookingRepository
 @inject NavigationManager NavigationManager
+@inject IBookingValidator BookingValidator
 
 @if (ResourceId is null)
 {
@@ -17,19 +19,24 @@ else
 {
     <h3>Create new booking for Resource @_resource.Name</h3>
 
-    @if (_errorMessage is not null)
+    @if (_isError)
     {
-        <ErrorMessage Message=@_errorMessage></ErrorMessage>
+        <ErrorMessage Message="Time period is overlapping with existing bookings."></ErrorMessage>
     }
 
     <EditForm Model="@_bookingForm" OnValidSubmit="OnSubmitBooking">
         <DataAnnotationsValidator/>
-        <InputText @bind-Value="_bookingForm.EmployeeName"></InputText>
-        <ValidationMessage For="@(() => _bookingForm.EmployeeName)"/>
+        <ValidationSummary/>
 
+        <label>Employee Name</label>
+        <InputText @bind-Value="_bookingForm.EmployeeName"></InputText>
+
+        <label>Start Time</label>
         <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="_bookingForm.StartTime"></InputDate>
+        <label>End Time</label>
         <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="_bookingForm.EndTime"></InputDate>
 
+        <label>Notes</label>
         <InputTextArea @bind-Value="_bookingForm.Notes"></InputTextArea>
         <input type="submit" value="Create New Booking"/>
     </EditForm>
@@ -47,7 +54,7 @@ else
         EndTime = DateTime.Now.AddHours(1),
     };
 
-    private string? _errorMessage;
+    private bool _isError = false;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -58,8 +65,15 @@ else
 
     private async Task OnSubmitBooking(EditContext editContext)
     {
-        await BookingRepository.AddBooking(_bookingForm);
-        NavigationManager.NavigateTo($"/Booking/{ResourceId}");
+        if (await BookingValidator.ValidateTimePeriod(_bookingForm))
+        {
+            await BookingRepository.AddBooking(_bookingForm);
+            NavigationManager.NavigateTo($"/Booking/{ResourceId}");
+        }
+        else
+        {
+            _isError = true;
+        }
     }
 
 }

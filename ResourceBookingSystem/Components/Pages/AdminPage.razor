@@ -7,9 +7,9 @@
 
 <EditForm Model="@_resourceForm" OnValidSubmit="SaveData">
     <DataAnnotationsValidator/>
+    <ValidationSummary/>
 
     <InputText @bind-Value="_resourceForm.Name"></InputText>
-    <ValidationMessage For="@(() => _resourceForm.Name)"/>
 
     <label>Active?</label>
     <InputCheckbox @bind-Value="_resourceForm.IsActive"></InputCheckbox>
