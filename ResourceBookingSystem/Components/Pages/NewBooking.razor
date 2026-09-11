@@ -22,8 +22,11 @@ else
         <ErrorMessage Message=@_errorMessage></ErrorMessage>
     }
 
-    <EditForm Model="@_bookingForm" OnSubmit="OnSubmitBooking">
+    <EditForm Model="@_bookingForm" OnValidSubmit="OnSubmitBooking">
+        <DataAnnotationsValidator/>
         <InputText @bind-Value="_bookingForm.EmployeeName"></InputText>
+        <ValidationMessage For="@(() => _bookingForm.EmployeeName)"/>
+
         <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="_bookingForm.StartTime"></InputDate>
         <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="_bookingForm.EndTime"></InputDate>
 

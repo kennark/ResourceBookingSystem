@@ -4,31 +4,38 @@
 @inject IResourceRepository ResourceRepository
 <h3>Available Resources</h3>
 
-<table>
-    <thead>
-    <tr>
-        <th>
-            Resource Name
-        </th>
-        <th>
-
-        </th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var resource in availableResources)
-    {
+@if (availableResources.Any())
+{
+    <table>
+        <thead>
         <tr>
-            <td>
-                @resource.Name
-            </td>
-            <td>
-                <NavLink href="@($"Booking/{resource.Id}")">View Bookings</NavLink>
-            </td>
+            <th>
+                Resource Name
+            </th>
+            <th>
+
+            </th>
         </tr>
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (var resource in availableResources)
+        {
+            <tr>
+                <td>
+                    @resource.Name
+                </td>
+                <td>
+                    <NavLink href="@($"Booking/{resource.Id}")">View Bookings</NavLink>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No available resources.</p>
+}
 
 @code {
 

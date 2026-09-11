@@ -10,7 +10,7 @@ public class ResourceRepository(DatabaseContext dbContext) : IResourceRepository
 {
     public async Task<List<Resource>> GetAllResources()
     {
-        return await dbContext.Resources.ToListAsync();
+        return await dbContext.Resources.AsNoTracking().ToListAsync();
     }
 
     public async Task<List<Resource>> GetAllActiveResources()

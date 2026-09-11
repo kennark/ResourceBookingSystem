@@ -5,12 +5,14 @@
 
 <h3>AdminPage</h3>
 
-<EditForm Model="@resourceForm" OnSubmit="SaveData">
+<EditForm Model="@_resourceForm" OnValidSubmit="SaveData">
+    <DataAnnotationsValidator/>
 
-    <InputText @bind-Value="resourceForm.Name"></InputText>
+    <InputText @bind-Value="_resourceForm.Name"></InputText>
+    <ValidationMessage For="@(() => _resourceForm.Name)"/>
 
     <label>Active?</label>
-    <InputCheckbox @bind-Value="resourceForm.IsActive"></InputCheckbox>
+    <InputCheckbox @bind-Value="_resourceForm.IsActive"></InputCheckbox>
     <input type="submit" value="Create new"/>
 </EditForm>
 
@@ -28,7 +30,7 @@
     </tr>
     </thead>
     <tbody>
-    @foreach (var resource in resources)
+    @foreach (var resource in _resources)
     {
         <tr>
             <td>
@@ -47,20 +49,19 @@
 
 @code {
 
-    private List<Resource> resources = [];
-    private Resource resourceForm = new();
+    private List<Resource> _resources = [];
+    private Resource _resourceForm = new();
 
     protected override async Task OnInitializedAsync()
     {
-        resources = await ResourceRepository.GetAllResources();
+        _resources = await ResourceRepository.GetAllResources();
     }
 
     private async Task SaveData(EditContext editContext)
     {
-        await ResourceRepository.AddOrUpdateResource(resourceForm);
+        await ResourceRepository.AddOrUpdateResource(_resourceForm);
         // Reload table
         await OnInitializedAsync();
+        _resourceForm = new Resource();
     }
-
-
 }
