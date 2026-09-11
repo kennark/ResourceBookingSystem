@@ -1,0 +1,66 @@
+@page "/AdminPage"
+@using Data.Repositories.Interfaces
+@using Domain.Entities
+@inject IResourceRepository ResourceRepository
+
+<h3>AdminPage</h3>
+
+<EditForm Model="@resourceForm" OnSubmit="SaveData">
+
+    <InputText @bind-Value="resourceForm.Name"></InputText>
+
+    <label>Active?</label>
+    <InputCheckbox @bind-Value="resourceForm.IsActive"></InputCheckbox>
+    <input type="submit" value="Create new"/>
+</EditForm>
+
+
+<table>
+    <thead>
+    <tr>
+        <th>
+            Resource Name
+        </th>
+        <th>
+            Active?
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var resource in resources)
+    {
+        <tr>
+            <td>
+                @resource.Name
+            </td>
+            <td>
+                @(resource.IsActive ? "Yes" : "No")
+            </td>
+            <td>
+                <NavLink href="@($"EditResource/{resource.Id}")">Edit</NavLink>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@code {
+
+    private List<Resource> resources = [];
+    private Resource resourceForm = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        resources = await ResourceRepository.GetAllResources();
+    }
+
+    private async Task SaveData(EditContext editContext)
+    {
+        await ResourceRepository.AddOrUpdateResource(resourceForm);
+        // Reload table
+        await OnInitializedAsync();
+    }
+
+
+}

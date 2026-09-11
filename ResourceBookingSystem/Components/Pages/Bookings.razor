@@ -1,0 +1,81 @@
+@page "/Booking/{resourceId:int}"
+@using Data.Repositories.Interfaces
+@using Domain.Entities
+@inject IBookingRepository BookingRepository
+@inject IResourceRepository ResourceRepository
+@inject NavigationManager NavigationManager
+
+@if (ResourceId is null)
+{
+    <ErrorMessage Message="Resource ID is not set."></ErrorMessage>
+}
+else if (_resource is null)
+{
+    <ErrorMessage Message="Resource not found."></ErrorMessage>
+}
+else
+{
+    <h3>Bookings for resource @_resource?.Name: </h3>
+
+
+    <button @onclick="OnNewBookingButton">Create New Booking</button>
+
+    <table>
+        <thead>
+        <tr>
+            <th>
+                Employee Name
+            </th>
+            <th>
+                Start Time
+            </th>
+            <th>
+                End Time
+            </th>
+            <th>
+                Notes
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var booking in _bookings)
+        {
+            <tr>
+                <td>
+                    @booking.EmployeeName
+                </td>
+                <td>
+                    @booking.StartTime
+                </td>
+                <td>
+                    @booking.EndTime
+                </td>
+                <td>
+                    @booking.Notes
+                </td>
+
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    [Parameter] public int? ResourceId { get; set; }
+    private Resource? _resource;
+
+    private List<Booking> _bookings = [];
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _resource = await ResourceRepository.GetResourceById(ResourceId!.Value);
+        _bookings = await BookingRepository.GetAllBookingsForResource(ResourceId!.Value);
+    }
+
+    private void OnNewBookingButton()
+    {
+        NavigationManager.NavigateTo($"/NewBooking/{ResourceId}");
+    }
+
+}

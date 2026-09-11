@@ -1,0 +1,62 @@
+@page "/NewBooking/{resourceId:int}"
+@using Data.Repositories.Interfaces
+@using Domain.Entities
+@inject IResourceRepository ResourceRepository
+@inject IBookingRepository BookingRepository
+@inject NavigationManager NavigationManager
+
+@if (ResourceId is null)
+{
+    <ErrorMessage Message="Resource ID is not set."></ErrorMessage>
+}
+else if (_resource is null)
+{
+    <ErrorMessage Message="Resource not found."></ErrorMessage>
+}
+else
+{
+    <h3>Create new booking for Resource @_resource.Name</h3>
+
+    @if (_errorMessage is not null)
+    {
+        <ErrorMessage Message=@_errorMessage></ErrorMessage>
+    }
+
+    <EditForm Model="@_bookingForm" OnSubmit="OnSubmitBooking">
+        <InputText @bind-Value="_bookingForm.EmployeeName"></InputText>
+        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="_bookingForm.StartTime"></InputDate>
+        <InputDate Type="InputDateType.DateTimeLocal" @bind-Value="_bookingForm.EndTime"></InputDate>
+
+        <InputTextArea @bind-Value="_bookingForm.Notes"></InputTextArea>
+        <input type="submit" value="Create New Booking"/>
+    </EditForm>
+}
+
+@code {
+
+    [Parameter] public int? ResourceId { get; set; }
+
+    private Resource? _resource;
+
+    private Booking _bookingForm = new()
+    {
+        StartTime = DateTime.Now,
+        EndTime = DateTime.Now.AddHours(1),
+    };
+
+    private string? _errorMessage;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _resource = await ResourceRepository.GetResourceById(ResourceId!.Value);
+        if (_resource is not null)
+            _bookingForm.ResourceId = _resource.Id;
+    }
+
+    private async Task OnSubmitBooking(EditContext editContext)
+    {
+        await BookingRepository.AddBooking(_bookingForm);
+        NavigationManager.NavigateTo($"/Booking/{ResourceId}");
+    }
+
+}

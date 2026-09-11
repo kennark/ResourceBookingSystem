@@ -1,0 +1,47 @@
+@page "/EditResource/{ResourceId:int}"
+@using Data.Repositories.Interfaces
+@using Domain.Entities
+@inject IResourceRepository ResourceRepository
+@inject NavigationManager NavigationManager
+<h3>Edit Resource</h3>
+
+@if (ResourceId is null)
+{
+    <ErrorMessage Message="Resource ID is not set."></ErrorMessage>
+}
+else if (_resourceForm is null)
+{
+    <ErrorMessage Message="Resource not found."></ErrorMessage>
+}
+else
+{
+    <EditForm Model="@_resourceForm" OnSubmit="OnSubmit">
+
+        <InputText @bind-Value="_resourceForm.Name"></InputText>
+
+        <label>Active?</label>
+        <InputCheckbox @bind-Value="_resourceForm.IsActive"></InputCheckbox>
+        <input type="submit" value="Save edits"/>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public int? ResourceId { get; set; }
+
+    private Resource? _resourceForm;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _resourceForm = await ResourceRepository.GetResourceById(ResourceId!.Value);
+    }
+
+    private async Task OnSubmit()
+    {
+        if (_resourceForm is not null)
+        {
+            await ResourceRepository.AddOrUpdateResource(_resourceForm);
+            NavigationManager.NavigateTo("/AdminPage");
+        }
+    }
+
+}
