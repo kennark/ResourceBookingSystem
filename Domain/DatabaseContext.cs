@@ -36,6 +36,7 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<Booking>()
             .HasOne(b => b.Resource)
             .WithMany(r => r.Bookings)
-            .HasForeignKey(b => b.ResourceId);
+            .HasForeignKey(b => b.ResourceId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
