@@ -4,7 +4,7 @@ using Domain.Entities;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-namespace ResourceBookingSystemTests;
+namespace ResourceBookingSystemTests.Repositories;
 
 public class BookingRepositoryTests : IDisposable
 {
@@ -33,12 +33,12 @@ public class BookingRepositoryTests : IDisposable
     [Fact]
     public async Task AddBooking_And_GetAllBookingsForResource()
     {
-        using var context = new DatabaseContext(_options);
+        await using var context = new DatabaseContext(_options);
         var repo = new BookingRepository(context);
 
         var resource = new Resource { Name = "Conference", IsActive = true };
         context.Resources.Add(resource);
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var b1 = new Booking
         {
@@ -53,7 +53,7 @@ public class BookingRepositoryTests : IDisposable
         Assert.Equal(resource.Id, added.ResourceId);
 
         var list = await repo.GetAllBookingsForResource(resource.Id);
-        Assert.Single(list);
-        Assert.Equal("Alice", list[0].EmployeeName);
+        var item = Assert.Single(list);
+        Assert.Equal("Alice", item.EmployeeName);
     }
 }

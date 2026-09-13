@@ -1,6 +1,6 @@
-﻿using Data.Repositories.Interfaces;
-using Data.Validation;
+﻿using Data.Validation;
 using Domain.Entities;
+using ResourceBookingSystemTests.Components.FakeRepositories;
 
 namespace ResourceBookingSystemTests;
 
@@ -131,27 +131,5 @@ public class BookingValidatorTests
         var valid = await validator.ValidateTimePeriod(booking);
 
         Assert.True(valid);
-    }
-
-    private class FakeBookingRepository : IBookingRepository
-    {
-        private readonly List<Booking> _bookings;
-
-        public FakeBookingRepository(List<Booking> bookings)
-        {
-            _bookings = bookings ?? new List<Booking>();
-        }
-
-        public Task<Booking> AddBooking(Booking booking)
-        {
-            _bookings.Add(booking);
-            return Task.FromResult(booking);
-        }
-
-        public Task<List<Booking>> GetAllBookingsForResource(int id)
-        {
-            var result = _bookings.FindAll(b => b.ResourceId == id);
-            return Task.FromResult(result);
-        }
     }
 }

@@ -4,7 +4,7 @@ using Domain.Entities;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-namespace ResourceBookingSystemTests;
+namespace ResourceBookingSystemTests.Repositories;
 
 public class ResourceRepositoryTests : IDisposable
 {
@@ -33,7 +33,7 @@ public class ResourceRepositoryTests : IDisposable
     [Fact]
     public async Task GetAllResources_And_ActiveFiltering_GetResourceById_AddOrUpdate()
     {
-        using var context = new DatabaseContext(_options);
+        await using var context = new DatabaseContext(_options);
         var repo = new ResourceRepository(context);
 
         var r1 = new Resource { Name = "Room A", IsActive = true };
@@ -47,8 +47,8 @@ public class ResourceRepositoryTests : IDisposable
         Assert.Contains(all, x => x.Name == "Room B");
 
         var active = await repo.GetAllActiveResources();
-        Assert.Single(active);
-        Assert.Equal("Room A", active[0].Name);
+        var item = Assert.Single(active);
+        Assert.Equal("Room A", item.Name);
 
         var fetched = await repo.GetResourceById(r1.Id);
         Assert.NotNull(fetched);
